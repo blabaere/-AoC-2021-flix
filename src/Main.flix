@@ -1,3 +1,6 @@
+type alias Position = (Int, Int)
+type alias Command = (Direction, Int)
+
 // The main entry point.
 def main(_args: Array[String]): Int32 & Impure =
   match readInput() |> Result.flatMap(solve) {
@@ -7,22 +10,22 @@ def main(_args: Array[String]): Int32 & Impure =
 
   0 // exit code
 
-def solve(lines: List[String]): Result[(Int, Int), String] =
-  Result.traverse(parseCommand, lines) |>
-  Result.map(travel)
-
 def readInput(): Result[List[String], String] & Impure =
   File.readLines("input/day2/input.txt")
 
-def parseCommand(command: String): Result[(Direction, Int), String] =
-  let fragments = String.splitOn({ substr = " " }, command);
+def solve(lines: List[String]): Result[Position, String] =
+  Result.traverse(parseCommand, lines) |>
+  Result.map(travel)
+
+def parseCommand(command: String): Result[Command, String] =
+  let fragments = String.splitOn(substr = " ", command);
   
   match fragments {
       case verb::object::Nil => parseCommandSentence(verb, object)
       case _ => Err("Not a valid command: '{command}'")
   }
 
-def parseCommandSentence(verb: String, object: String): Result[(Direction, Int), String] = 
+def parseCommandSentence(verb: String, object: String): Result[Command, String] = 
   use Result.flatMap;
   let* direction = parseDirection(verb);
   let* distance = Int32.fromString(object);
@@ -43,7 +46,7 @@ enum Direction with Eq, ToString {
   case Down
 }
 
-def move(position: (Int, Int), command: (Direction, Int)): (Int, Int) =
+def move(position: Position, command: Command): Position =
   let (x, y) = position;
   let (direction, distance) = command;
 
@@ -53,5 +56,5 @@ def move(position: (Int, Int), command: (Direction, Int)): (Int, Int) =
       case Down    => (x, y + distance)
   }
 
-def travel(moves: List[(Direction, Int)]): (Int, Int) =
+def travel(moves: List[Command]): Position =
   List.foldLeft(move, (0, 0), moves)
