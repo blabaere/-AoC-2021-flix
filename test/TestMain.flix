@@ -1,8 +1,3 @@
-use Result.isErr;
-
-@test
-def test01(): Bool = 1 + 1 == 2
-
 @test
 def parseForwardDirection(): Bool =
   parseDirection("forward") == Ok(Forward)
