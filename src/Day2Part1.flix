@@ -1,17 +1,14 @@
 type alias Position = (Int, Int)
 type alias Command = (Direction, Int)
 
-// The main entry point.
-def main(_args: Array[String]): Int32 & Impure =
+def day2_part1_main(): String & Impure =
   match readInput() |> Result.flatMap(solve) {
     case Ok(x, y) => "${x * y}"
     case Err(msg) => msg
-  } |> Console.printLine;
-
-  0 // exit code
+  }
 
 def readInput(): Result[List[String], String] & Impure =
-  File.readLines("input/day2/input.txt")
+  File.readLines("input/day2.txt")
 
 def solve(lines: List[String]): Result[Position, String] =
   Result.traverse(parseCommand, lines) |>
