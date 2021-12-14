@@ -1,57 +1,29 @@
-type alias Position = (Int, Int)
-type alias Command = (Direction, Int)
+use Day2.Direction;
+use Day2.Direction.{Forward, Up, Down};
+use Day2.{Command, readInput, parseCommand};
+use Day2.loadInput;
 
-def day2_part1_main(): String & Impure =
-  match readInput() |> Result.flatMap(solve) {
-    case Ok(x, y) => "${x * y}"
-    case Err(msg) => msg
-  }
+namespace Day2/Part1 {
 
-def readInput(): Result[List[String], String] & Impure =
-  File.readLines("input/day2.txt")
+    type alias Position = (Int, Int)
 
-def solve(lines: List[String]): Result[Position, String] =
-  Result.traverse(parseCommand, lines) |>
-  Result.map(travel)
+    def move(position: Position, command: Command): Position =
+        let (x, y) = position;
+        let (direction, distance) = command;
 
-def parseCommand(command: String): Result[Command, String] =
-  let fragments = String.splitOn(substr = " ", command);
-  
-  match fragments {
-      case verb::object::Nil => parseCommandSentence(verb, object)
-      case _ => Err("Not a valid command: '{command}'")
-  }
+        match direction {
+            case Forward => (x + distance, y)
+            case Up      => (x, y - distance)
+            case Down    => (x, y + distance)
+        }
 
-def parseCommandSentence(verb: String, object: String): Result[Command, String] = 
-  use Result.flatMap;
-  let* direction = parseDirection(verb);
-  let* distance = Int32.fromString(object);
+    def travel(moves: List[Command]): Position =
+        List.foldLeft(move, (0, 0), moves)
 
-  Ok((direction, distance))
+    pub def main(): String & Impure =
+        match loadInput() |> Result.map(travel) {
+            case Ok(x, y) => "${x * y}"
+            case Err(msg) => msg
+        }
 
-def parseDirection(word: String): Result[Direction, String] & Pure = 
-  match word {
-    case "forward" => Ok(Forward)
-    case "up"      => Ok(Up)
-    case "down"    => Ok(Down)
-    case _ => Err("Not a valid direction: ${word}")
-  }
-
-enum Direction with Eq, ToString {
-  case Forward,
-  case Up,
-  case Down
 }
-
-def move(position: Position, command: Command): Position =
-  let (x, y) = position;
-  let (direction, distance) = command;
-
-  match direction {
-      case Forward => (x + distance, y)
-      case Up      => (x, y - distance)
-      case Down    => (x, y + distance)
-  }
-
-def travel(moves: List[Command]): Position =
-  List.foldLeft(move, (0, 0), moves)
