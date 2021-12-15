@@ -1,4 +1,4 @@
-namespace Day3 {
+namespace Day3/Part1 {
 
     @test
     def diagnosticFromLinesShouldTurnStringsIntoLists(): Bool =
@@ -6,7 +6,7 @@ namespace Day3 {
         
         diagnosticFromLines(lines) == ('a'::'b'::Nil)::('c'::'d'::Nil)::Nil
 
-    def readTestInput(): Result[List[String], String] & Impure =
+    pub def readTestInput(): Result[List[String], String] & Impure =
         File.readLines("input/day3_test.txt")
 
     @test

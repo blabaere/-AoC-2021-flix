@@ -1,4 +1,4 @@
-namespace Day3 {
+namespace Day3/Part1 {
 
     def flipBit(bit: Char): Char =
         match bit {
@@ -52,9 +52,10 @@ namespace Day3 {
     def readInput(): Result[List[String], String] & Impure =
         File.readLines("input/day3.txt")
 
-    pub def part1(): String & Impure =
+    pub def main(): String & Impure =
         match readInput() {
             case Ok(lines) => "${powerConsumption(lines)}"
             case Err(msg) => msg
-        }        
+        }
+
 }
