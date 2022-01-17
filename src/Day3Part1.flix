@@ -30,7 +30,7 @@ namespace Day3/Part1 {
         String.init(i -> a[i], len) as & Pure
 
     def intFromBinaryString(text: String): Int = 
-        import java.lang.Integer:parseInt(String, Int32);
+        import static java.lang.Integer.parseInt(String, Int32);
         parseInt(text, 2) as & Pure
 
     def intFromBits(bits: List[Char]): Int =

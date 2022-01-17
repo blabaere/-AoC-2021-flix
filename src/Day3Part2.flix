@@ -1,8 +1,10 @@
+use String.charAt;
+
 namespace Day3/Part2 {
 
     def bitCountsAt(diagnostic: List[String], index: Int): (Int, Int) =
-        let setCount = List.count(line -> String.charAt(index, line) == '1', diagnostic);
-        let unsetCount = List.count(line -> String.charAt(index, line) == '0', diagnostic);
+        let setCount = List.count(line -> charAt(index, line) == '1', diagnostic);
+        let unsetCount = List.count(line -> charAt(index, line) == '0', diagnostic);
 
         (setCount, unsetCount)
 
@@ -25,7 +27,7 @@ namespace Day3/Part2 {
             case head::Nil => head
             case _ => {
                 let bitCriteria = bitCriteriaAt(diagnostic, index);
-                let filtered = List.filter(line -> String.charAt(index, line) == bitCriteria, diagnostic);
+                let filtered = List.filter(line -> charAt(index, line) == bitCriteria, diagnostic);
                 
                 ratingAt(bitCriteriaAt, filtered, index + 1)
             }
@@ -39,7 +41,7 @@ namespace Day3/Part2 {
 
     def intFromBinaryString(text: String): Result[Int, String] = 
         try {
-            import java.lang.Integer:parseInt(String, Int32);
+            import static java.lang.Integer.parseInt(String, Int32);
             Ok(parseInt(text, 2)) as & Pure
         } catch {
             case _: ##java.lang.NumberFormatException => Err("Int32.fromString")

@@ -15,7 +15,7 @@ namespace Day3/Part1 {
 
     @test
     def can_parse_binary(): Bool = 
-        import java.lang.Integer:parseInt(String, Int32);
+        import static java.lang.Integer.parseInt(String, Int32);
         parseInt("00100", 2) as & Pure  == 4
     
     @test
